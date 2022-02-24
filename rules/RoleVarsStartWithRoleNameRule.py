@@ -16,12 +16,12 @@ from yaml.resolver import BaseResolver
 from yaml.loader import SafeLoader
 
 from pathlib import Path
-from ansiblelint.utils import parse_yaml_from_file, LINE_NUMBER_KEY
+from ansiblelint.utils import LINE_NUMBER_KEY
 
 if typing.TYPE_CHECKING:
-    from ansiblelint.constants import odict
     from ansiblelint.errors import MatchError
     from ansiblelint.file_utils import Lintable
+    from typing import List
 
 
 ID: str = 'role_vars_start_with_role_name'
@@ -95,14 +95,14 @@ class LineLoader(SafeLoader):
 
 class RoleVarsStartWithRoleNameRule(ansiblelint.rules.AnsibleLintRule):
     """
-    Rule class to test if all role parameters (defaults, vars) have 
+    Rule class to test if all role parameters (defaults, vars) have
     a name starting with "<role_name>_".
     """
     id = ID
     shortdesc = SHORTDESC
     description = DESC
     severity = 'HIGH'
-    tags = [ID,'metadata','readability']
+    tags = [ID, 'metadata', 'readability']
 
     def matchyaml(self, file: 'Lintable') -> typing.List['MatchError']:
         """Return matches for variables defined in vars files with no specification."""
@@ -112,11 +112,11 @@ class RoleVarsStartWithRoleNameRule(ansiblelint.rules.AnsibleLintRule):
             rolename = _determine_role_name(file.path)
             with open(str(file.path), 'r') as f:
                 variables = yaml.load(f, Loader=LineLoader)
-                for var_name in filter(lambda k: not k.startswith(LINE_NUMBER_KEY) and not isinstance(variables[k],dict), variables.keys()):
-                    if not var_name.startswith(rolename+ROLENAME_SEP):
+                for var_name in filter(lambda k: not k.startswith(LINE_NUMBER_KEY) and not isinstance(variables[k], dict), variables.keys()):
+                    if not var_name.startswith(rolename + ROLENAME_SEP):
                         results.append(
                             self.create_matcherror(
-                                details=f'{self.shortdesc}: {var_name}', filename=file, linenumber=variables[LINE_NUMBER_KEY+var_name]
+                                details=f'{self.shortdesc}: {var_name}', filename=file, linenumber=variables[LINE_NUMBER_KEY + var_name]
                             )
                         )
         else:
