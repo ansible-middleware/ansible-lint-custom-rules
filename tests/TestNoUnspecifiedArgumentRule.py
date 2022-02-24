@@ -35,4 +35,4 @@ class CliTestCase(common.CliTestCase):
     )
 )
 def test_lookup_argument_specs(path, varname, expected):
-	TT._lookup_argument_specs(path, varname)
+    TT._lookup_argument_specs(path, varname)

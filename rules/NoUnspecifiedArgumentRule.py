@@ -19,9 +19,11 @@ from pathlib import Path
 from ansiblelint.utils import parse_yaml_from_file, LINE_NUMBER_KEY
 
 if typing.TYPE_CHECKING:
-    from ansiblelint.constants import odict
     from ansiblelint.errors import MatchError
     from ansiblelint.file_utils import Lintable
+    from typing import List
+    from typing import Dict
+    from typing import Any
 
 
 ID: str = 'no_unspecified_argument'
@@ -41,6 +43,7 @@ DESC: str = r"""Rule to test if all role arguments are specified in meta/argumen
       no_unspecified_argument:
 """
 
+
 def _lookup_argument_specs(var_file: Path, var_name: str) -> bool:
     """
     Find arg specification and lookup variable name is present.
@@ -51,7 +54,7 @@ def _lookup_argument_specs(var_file: Path, var_name: str) -> bool:
         argument_specs_path: Path = var_file.parent / ".." / "meta" / "argument_specs.yml"
         argument_specs = str(argument_specs_path)
 
-    if argument_specs_path.is_file() and not argument_specs in meta_data.keys():
+    if argument_specs_path.is_file() and argument_specs not in meta_data.keys():
         meta_data[argument_specs] = parse_yaml_from_file(argument_specs)
 
     if argument_specs in meta_data.keys():
@@ -91,14 +94,14 @@ class LineLoader(SafeLoader):
 
 class NoUnspecifiedArgumentRule(ansiblelint.rules.AnsibleLintRule):
     """
-    Rule class to test if all role parameters (defaults, vars) have 
+    Rule class to test if all role parameters (defaults, vars) have
     a format specification in meta/argument_specs.yml.
     """
     id = ID
     shortdesc = SHORTDESC
     description = DESC
     severity = 'HIGH'
-    tags = [ID,'metadata','readability']
+    tags = [ID, 'metadata', 'readability']
 
     def matchyaml(self, file: 'Lintable') -> typing.List['MatchError']:
         """Return matches for variables defined in vars files with no specification."""
@@ -107,11 +110,11 @@ class NoUnspecifiedArgumentRule(ansiblelint.rules.AnsibleLintRule):
         if file.kind == 'vars':
             with open(str(file.path), 'r') as f:
                 variables = yaml.load(f, Loader=LineLoader)
-                for var_name in filter(lambda k: not k.startswith(LINE_NUMBER_KEY) and not isinstance(variables[k],dict), variables.keys()):
+                for var_name in filter(lambda k: not k.startswith(LINE_NUMBER_KEY) and not isinstance(variables[k], dict), variables.keys()):
                     if not _lookup_argument_specs(file.path, var_name):
                         results.append(
                             self.create_matcherror(
-                                details=f'{self.shortdesc}: {var_name}', filename=file, linenumber=variables[LINE_NUMBER_KEY+var_name]
+                                details=f'{self.shortdesc}: {var_name}', filename=file, linenumber=variables[LINE_NUMBER_KEY + var_name]
                             )
                         )
         else:
