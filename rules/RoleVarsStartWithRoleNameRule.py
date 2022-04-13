@@ -101,7 +101,7 @@ class RoleVarsStartWithRoleNameRule(ansiblelint.rules.AnsibleLintRule):
     id = ID
     shortdesc = SHORTDESC
     description = DESC
-    severity = 'HIGH'
+    severity = 'MEDIUM'
     tags = [ID, 'metadata', 'readability']
 
     def matchyaml(self, file: 'Lintable') -> typing.List['MatchError']:

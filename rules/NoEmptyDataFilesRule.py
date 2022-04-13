@@ -45,7 +45,7 @@ class NoEmptyDataFilesRule(ansiblelint.rules.AnsibleLintRule):
     """
     id = ID
     shortdesc = description = 'All YAML files should have some data'
-    severity = 'MEDIUM'
+    severity = 'LOW'
     tags = [ID, 'format', 'yaml']
 
     def matchyaml(self, file: Lintable

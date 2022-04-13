@@ -27,7 +27,7 @@ class LoopIsRecommendedRule(ansiblelint.rules.AnsibleLintRule):
     id: str = ID
     shortdesc: str = 'loop is recommended and with_* may be repalced with it'
     description: str = DESC
-    severity: str = 'LOW'
+    severity: str = 'MEDIUM'
     tags: typing.List[str] = [ID, 'readability', 'formatting']
 
     def matchtask(self, task: typing.Dict[str, typing.Any],

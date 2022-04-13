@@ -49,7 +49,7 @@ class TasksFileHasValidNameRule(ansiblelint.rules.AnsibleLintRule):
     id = ID
     shortdesc: str = 'Tasks file must have valid filename'
     description = DESC
-    severity = 'HIGH'
+    severity = 'MEDIUM'
     tags = [ID, 'task']
 
     @functools.lru_cache()

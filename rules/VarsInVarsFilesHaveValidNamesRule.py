@@ -67,8 +67,8 @@ class VarsInVarsFilesHaveValidNamesRule(ansiblelint.rules.AnsibleLintRule):
     id = ID
     shortdesc: str = 'Variable in vars files must have valid name'
     description = DESC
-    severity = 'HIGH'
-    tags = ['idiom']
+    severity = 'MEDIUM'
+    tags = [ID, 'idiom']
 
     @functools.lru_cache(None)
     def valid_name_re(self) -> typing.Pattern:

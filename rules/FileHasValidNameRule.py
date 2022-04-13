@@ -55,7 +55,7 @@ class FileHasValidNameRule(ansiblelint.rules.AnsibleLintRule):
     id = ID
     shortdesc = 'Playbook and related files should have valid filenames'
     description = DESC
-    severity = 'MEDIUM'
+    severity = 'HIGH'
     tags = [ID, 'playbook', 'readability', 'formatting']
 
     @functools.lru_cache(None)
