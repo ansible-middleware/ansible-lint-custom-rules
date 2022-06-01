@@ -34,14 +34,14 @@ DESC: str = r"""Rule to test if files are smalll enough.
 """
 
 VERBS: typing.List[str] = """\
-add apply ask assemble become begin call check close collect configure consume
-copy create debug delete deploy determine disable display do download drop
-enable ensure execute exit extract fail find flag flush generate get go
-ignore include inform initialize install help keep kill leave let link load
-look make move notify open own parse perform play populate post prepare
-put read refresh reload remove reown retrieve restart run set setup show
-skip start stop symlink take talk tell terminate test transform try turn
-update use validate verify wait work\
+add allow apply ask assemble become begin call check close collect compile
+configure consume copy create debug delete deploy determine disable display
+do download drop enable ensure execute exit extract fail find flag flush
+generate get go ignore include inform initialize install help keep kill
+leave let link load look make move notify open own parse perform play
+populate post prepare put read refresh reload remove reown retrieve
+restart run set setup show skip start stop symlink take talk tell terminate
+test transform try turn update use validate verify wait work\
 """.split()
 
 VERBS_ALL: typing.List[str] = VERBS + [v.capitalize() for v in VERBS]
