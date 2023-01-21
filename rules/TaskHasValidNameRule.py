@@ -40,9 +40,9 @@ do download drop enable ensure execute exit extract fail fetch find flag
 flush generate get go ignore include inform initialize install help keep
 kill leave let link load look make move notify open own parse perform play
 populate post prepare produce put read refresh reload remove reown retrieve
-restart return run set setup show skip start stop symlink take talk tell
-terminate test transform try turn uninstall update use validate verify wait
-work\
+reset restart return run set setup show skip start stop symlink take talk
+tell terminate test transform try turn uninstall update use validate verify
+wait work\
 """.split()
 
 VERBS_ALL: typing.List[str] = VERBS + [v.capitalize() for v in VERBS]
