@@ -114,7 +114,7 @@ class NoUnspecifiedArgumentRule(ansiblelint.rules.AnsibleLintRule):
                     if not _lookup_argument_specs(file.path, var_name):
                         results.append(
                             self.create_matcherror(
-                                details=f'{self.shortdesc}: {var_name}', filename=file, lineno=variables[LINE_NUMBER_KEY + var_name]
+                                message=f'{self.shortdesc}: {var_name}', details=f'{self.shortdesc}: {var_name}', filename=file, lineno=variables[LINE_NUMBER_KEY + var_name]
                             )
                         )
         else:
