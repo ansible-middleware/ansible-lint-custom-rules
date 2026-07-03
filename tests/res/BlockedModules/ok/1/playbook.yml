@@ -4,4 +4,4 @@
   gather_facts: false
   tasks:
     - name: Ping
-      include: roles/ping/tasks/do_ping.yml
+      include_tasks: roles/ping/tasks/do_ping.yml

@@ -86,7 +86,7 @@ class TasksFileHasValidNameRule(ansiblelint.rules.AnsibleLintRule):
             if not self.is_valid_filename(path):
                 return [
                     self.create_matcherror(message=f'{self.shortdesc}: {path}',
-                                           filename=file.name)
+                                           filename=file)
                 ]
 
         return []

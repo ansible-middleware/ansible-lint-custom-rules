@@ -6,7 +6,8 @@
 # pylint: disable=missing-function-docstring
 """Test cases for the rule, TasksFileHasValidName.
 """
-import ansiblelint.config
+import unittest.mock
+
 import pytest
 
 from rules import TasksFileHasValidNameRule as TT
@@ -38,14 +39,12 @@ class CliTestCase(common.CliTestCase):
      ('tasks/include/main-0.yml', r'\S+', False, True),
      ]
 )
-def test_is_valid_filename(path, name, unicode, expected, monkeypatch):
-    if name:
-        patch = dict(name=name, unicode=unicode)
-    else:
-        patch = dict(unicode=unicode)
-
-    # pylint: disable=no-member
-    monkeypatch.setitem(ansiblelint.config.options.rules, TT.ID, patch)
-    base = Base()
-    assert base.rule.is_valid_filename(path) == expected
-    base.clear()
+def test_is_valid_filename(path, name, unicode, expected):
+    rule = TT.TasksFileHasValidNameRule()
+    config = dict(name=name, unicode=unicode) if name else {}
+    mock_opts = unittest.mock.MagicMock()
+    mock_opts.rules = {TT.ID: config}
+    mock_coll = unittest.mock.MagicMock()
+    mock_coll.options = mock_opts
+    rule._collection = mock_coll
+    assert rule.is_valid_filename(path) == expected

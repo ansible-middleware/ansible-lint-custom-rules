@@ -5,9 +5,15 @@
 [ansible-lint](https://github.com/ansible/ansible-lint) custom ruleset used in middleware_automation for collections linting.
 
 
-## Credits
+## Requirements
 
-- [ansible-lint-custom-rules](https://github.com/ssato/ansible-lint-custom-rules) by Satoru SATOH <ssato@redhat.com>
+- `ansible-lint >= 26.0, < 27` (tested against the 26.x release series)
+
+
+## Contributors
+
+- Satoru SATOH <ssato@redhat.com>
+- Ranabir Chakraborty <ranabir@ibm.com>
 
 
 ## Test

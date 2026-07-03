@@ -16,7 +16,7 @@ from yaml.resolver import BaseResolver
 from yaml.loader import SafeLoader
 
 from pathlib import Path
-from ansiblelint.utils import LINE_NUMBER_KEY
+from ansiblelint.constants import LINE_NUMBER_KEY
 
 if typing.TYPE_CHECKING:
     from ansiblelint.errors import MatchError
@@ -116,7 +116,7 @@ class RoleVarsStartWithRoleNameRule(ansiblelint.rules.AnsibleLintRule):
                     if not var_name.startswith(rolename + ROLENAME_SEP):
                         results.append(
                             self.create_matcherror(
-                                details=f'{self.shortdesc}: {var_name}', filename=file, linenumber=variables[LINE_NUMBER_KEY + var_name]
+                                details=f'{self.shortdesc}: {var_name}', filename=file, lineno=variables[LINE_NUMBER_KEY + var_name]
                             )
                         )
         else:

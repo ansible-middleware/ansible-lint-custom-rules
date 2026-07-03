@@ -12,6 +12,7 @@ variable, _ANSIBLE_LINT_RULE_CUSTOM_2020_30_MAX_LINES.
 
 """
 import functools
+import os
 import typing
 import warnings
 
@@ -88,9 +89,15 @@ class FileIsSmallEnoughRule(ansiblelint.rules.AnsibleLintRule):
             assert max_lines > 0
             return max_lines
 
-        except (ValueError, AssertionError) as exc:
-            warnings.warn(f'Invalid max_lines value: {max_lines:!r}'
-                          f'exc={exc!s}')
+        except (TypeError, ValueError, AssertionError) as exc:
+            warnings.warn(f'Invalid max_lines value, exc={exc!s}')
+
+        env_val = os.environ.get('_ANSIBLE_LINT_RULE_CUSTOM_2020_30_MAX_LINES')
+        if env_val:
+            try:
+                return int(env_val)
+            except ValueError:
+                pass
 
         return DEFAULT_MAX_LINES
 
@@ -108,8 +115,8 @@ class FileIsSmallEnoughRule(ansiblelint.rules.AnsibleLintRule):
             if self.exceeds_max_lines(path):
                 return [
                     self.create_matcherror(
-                        message='File {path} may be too large',
-                        filename=path
+                        message=f'File {path} may be too large',
+                        filename=file
                     )
                 ]
 

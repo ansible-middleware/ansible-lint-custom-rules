@@ -8,7 +8,6 @@ import re
 import typing
 import warnings
 
-import ansiblelint.utils
 import ansiblelint.rules
 
 if typing.TYPE_CHECKING:
@@ -109,9 +108,7 @@ class TaskHasValidNameRule(ansiblelint.rules.AnsibleLintRule):
         if is_named_task(task):
             name = task.get('name', False)
             if not name:
-                return 'Task has no name: {}'.format(
-                    ansiblelint.utils.task_to_str(task)
-                )
+                return 'Task has no name: {}'.format(str(task))
             if self.is_invalid_task_name(name):
                 return f"Invalid task name '{name}'"
 

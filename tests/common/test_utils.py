@@ -92,7 +92,7 @@ def test_load_data(path, warn, exp):
 @pytest.mark.parametrize(
     ('workdir', 'conf', 'env'),
     ((constants.TESTS_RES_DIR / 'DebugRule/ok/0', False, False),
-     (constants.TESTS_RES_DIR / 'DebugRule/ng/1', True, False),
+     (constants.TESTS_RES_DIR / 'DebugRule/ng/1', False, True),
      (constants.TESTS_RES_DIR / 'DebugRule/ng/2', False, True),
      )
 )

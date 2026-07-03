@@ -58,7 +58,7 @@ class NoEmptyDataFilesRule(ansiblelint.rules.AnsibleLintRule):
                 return [
                     self.create_matcherror(
                         message=f'Empty data file: {path!s}',
-                        filename=path
+                        filename=file
                     )
                 ]
 

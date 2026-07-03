@@ -70,7 +70,10 @@ class VarsShouldNotBeUsedRule(ansiblelint.rules.AnsibleLintRule):
             path = str(file.path)
             if contains_vars_directive(path):
                 return [
-                    self.create_matcherror(message=f'{self.shortdesc}: {path}')
+                    self.create_matcherror(
+                        message=f'{self.shortdesc}: {path}',
+                        filename=file
+                    )
                 ]
 
         return []
