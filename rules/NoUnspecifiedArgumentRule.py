@@ -16,7 +16,8 @@ from yaml.resolver import BaseResolver
 from yaml.loader import SafeLoader
 
 from pathlib import Path
-from ansiblelint.utils import parse_yaml_from_file, LINE_NUMBER_KEY
+from ansiblelint.constants import LINE_NUMBER_KEY
+from ansiblelint.utils import parse_yaml_from_file
 
 if typing.TYPE_CHECKING:
     from ansiblelint.errors import MatchError

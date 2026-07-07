@@ -10,7 +10,6 @@ import typing
 import warnings
 
 import ansiblelint.rules
-import ansiblelint.utils
 
 if typing.TYPE_CHECKING:
     from ansiblelint.constants import odict
@@ -46,13 +45,23 @@ C_UNICODE: str = 'unicode'
 DEFAULT_NAME_RE: typing.Pattern = re.compile(r'^\w+$', re.ASCII)
 
 
+def _nested_items(data: typing.Any) -> typing.Iterator[typing.Tuple[typing.Any, typing.Any, typing.Any]]:
+    """Yield (key, value, parent) for all items in nested dicts/lists."""
+    if isinstance(data, dict):
+        for key, val in data.items():
+            yield key, val, data
+            yield from _nested_items(val)
+    elif isinstance(data, list):
+        for val in data:
+            yield 'list-item', val, data
+            yield from _nested_items(val)
+
+
 def each_keys(data: 'odict[str, typing.Any]') -> typing.Iterator[str]:
     """
     Traverse nested dict and yield keys.
     """
-    for key, _val, _parent in ansiblelint.utils.nested_items(data):
-        # Special case.
-        # .. seealso:: ansiblelint.utils.nested_items
+    for key, _val, _parent in _nested_items(data):
         if key == 'list-item':
             continue
 

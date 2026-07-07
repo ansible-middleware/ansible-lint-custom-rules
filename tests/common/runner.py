@@ -7,10 +7,12 @@
 import os
 import pathlib
 import subprocess
+import sys
 import tempfile
 import typing
 import unittest.mock
 
+import ansiblelint.app
 import ansiblelint.config
 import ansiblelint.constants
 import ansiblelint.errors
@@ -97,8 +99,9 @@ class RuleRunner:
         options = ansiblelint.config.options
         # .. seealso:: ansiblelint.testing.fixtures.default_rules_collection
         options.enable_list = ['no-same-owner']
+        app = ansiblelint.app.get_app(offline=True)
         self.rules = ansiblelint.rules.RulesCollection(
-            rulesdirs=self.rulesdirs, options=options
+            app=app, rulesdirs=self.rulesdirs, options=options
         )
 
     def get_skip_list(self, isolated: bool = True) -> typing.List[str]:
@@ -109,7 +112,8 @@ class RuleRunner:
         skip_list = self.skip_list.copy() if self.skip_list else []
         if isolated:
             skip_list.extend([
-                r.id for r in self.rules if r.id != self.rule.id
+                r.id for r in self.rules
+                if r.id != self.rule.id and 'unskippable' not in r.tags
             ])
 
         return skip_list
@@ -172,7 +176,10 @@ class CliRunner(RuleRunner):
         """
         super().__init__(rule, rules_dir, skip_list, enable_default)
 
-        self.cmd = ['ansible-lint', '-r', f'{rules_dir.resolve()!s}']
+        ansible_lint_bin = str(pathlib.Path(sys.executable).parent / 'ansible-lint')
+        self.cmd = [ansible_lint_bin,
+                    f'--enable-list={rule.id}',
+                    '-r', f'{rules_dir.resolve()!s}']
         if enable_default:
             self.cmd.append('-R')
 
@@ -193,6 +200,20 @@ class CliRunner(RuleRunner):
         env = utils.get_env(ctx.env or {})
 
         conf['skip_list'] = self.get_skip_list(isolated)
+        # v26+: custom rules are excluded by the production profile unless
+        # explicitly listed in enable_list.
+        conf['enable_list'] = [self.rule.id]
+
+        # v26+: the config schema only allows 'exclude_paths' per-rule
+        if 'rules' in conf:
+            conf['rules'] = {
+                rule_id: {k: v for k, v in rule_conf.items()
+                           if k == 'exclude_paths'}
+                for rule_id, rule_conf in conf['rules'].items()
+                if isinstance(rule_conf, dict)
+            }
+            if not any(conf['rules'].values()):
+                del conf['rules']
 
         with tempfile.NamedTemporaryFile(mode='w') as cio:
             yaml.safe_dump(conf, cio)

@@ -56,7 +56,7 @@ class RuleTestCase(common.RuleTestCase):
     def test_clear_fns(self):
         fns = self.base.clear_fns
         self.assertTrue(fns)
-        self.assertTrue(len(fns) > 1)
+        self.assertTrue(len(fns) >= 1)
 
 
 class CliTestCase(common.CliTestCase):

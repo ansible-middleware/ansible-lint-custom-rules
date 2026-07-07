@@ -6,9 +6,9 @@
 # pylint: disable=missing-function-docstring
 """Test cases for the rule, FileHasValidNameRule.
 """
-import pytest
+import unittest.mock
 
-import ansiblelint.config
+import pytest
 
 from rules import FileHasValidNameRule as TT
 from tests import common
@@ -28,20 +28,15 @@ NG_VALID_NAME_RE = r'\S+NEVER_MATCH'
      ('main-0.yml', r'\S+', False, False),
      )
 )
-def test_is_invalid_filename(path, name, unicode, expected, monkeypatch):
-    base = Base()
-    rule = base.rule
-    ansiblelint.config.options.rules = {
-        rule.id: dict(name=TT.DEFAULT_NAME_RE.pattern, unicode=False)
-    }
-
-    if name:
-        monkeypatch.setitem(
-            ansiblelint.config.options.rules, TT.ID,
-            dict(name=name, unicode=unicode)
-        )
+def test_is_invalid_filename(path, name, unicode, expected):
+    rule = TT.FileHasValidNameRule()
+    config = dict(name=name, unicode=unicode) if name else {}
+    mock_opts = unittest.mock.MagicMock()
+    mock_opts.rules = {TT.ID: config}
+    mock_coll = unittest.mock.MagicMock()
+    mock_coll.options = mock_opts
+    rule._collection = mock_coll
     assert rule.is_invalid_filename(path) == expected
-    base.clear()
 
 
 class Base(common.Base):

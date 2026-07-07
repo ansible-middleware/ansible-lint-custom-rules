@@ -2,5 +2,5 @@
   connection: local
   gather_facts: false
   tasks:
-    - name: ZZZZZ
+    - name: Install package
       ping:

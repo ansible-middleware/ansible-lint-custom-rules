@@ -6,6 +6,8 @@
 # pylint: disable=too-few-public-methods
 """Test cases for the rule, TaskHasValidNamePatternRule.
 """
+import unittest.mock
+
 import ansiblelint.config
 import pytest
 
@@ -29,13 +31,13 @@ CNF_0 = dict(name=NAME_RE_0)
      (INVALID_NAME_0, NAME_RE_0, False),
      )
 )
-def test_is_invalid_task_name(name, evalue, expected, monkeypatch):
-    monkeypatch.setitem(
-        ansiblelint.config.options.rules, TT.ID,
-        dict(name=evalue)
-    )
-    base = Base()
-    rule = base.rule
+def test_is_invalid_task_name(name, evalue, expected):
+    rule = TT.TaskHasValidNameRule()
+    mock_options = unittest.mock.MagicMock()
+    mock_options.rules = {TT.ID: {'name': evalue} if evalue else {}}
+    mock_collection = unittest.mock.MagicMock()
+    mock_collection.options = mock_options
+    rule._collection = mock_collection
     assert rule.is_invalid_task_name(name) == expected
 
 

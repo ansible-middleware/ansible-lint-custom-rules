@@ -1,1 +1,3 @@
-../../../ok/0/group_vars/localhost.yml
+---
+foo.invalid: 1
+bar-invalid: 2

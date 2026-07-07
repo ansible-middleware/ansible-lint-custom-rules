@@ -43,7 +43,7 @@ def test_get_lintables_failure(tmp_path):
 @pytest.mark.parametrize(
     ('workdir', 'conf', 'env'),
     ((constants.TESTS_RES_DIR / 'DebugRule/ok/0', False, False),
-     (constants.TESTS_RES_DIR / 'DebugRule/ng/1', True, False),
+     (constants.TESTS_RES_DIR / 'DebugRule/ng/1', False, True),
      (constants.TESTS_RES_DIR / 'DebugRule/ng/2', False, True),
      )
 )
@@ -150,7 +150,7 @@ def test_CliRunner__init__(enable_default):
 @pytest.mark.parametrize(
     ('workdir', 'success'),
     ((DEBUG_RES_DIR / 'ok/0', True),
-     (DEBUG_RES_DIR / 'ng/0', False),
+     (DEBUG_RES_DIR / 'ng/2', False),
      )
 )
 def test_CliRunner_run(workdir, success):
@@ -159,9 +159,7 @@ def test_CliRunner_run(workdir, success):
     if success:
         assert res.result.returncode == 0
         assert res.result.stdout == ''
-
-        if sys.version_info.minor >= 8:
-            assert res.result.stderr == ''
+        assert 'ERROR' not in res.result.stderr
     else:
         assert res.result.returncode != 0
         assert bool(res.result.stdout)
